@@ -18,12 +18,12 @@ window.onload = () => {
     document.addEventListener("keypress", (e) => {
         switch (e.key) {
             case 'w':
+                state.y -= 50;
+                break;
+            case 's':
                 state.y += 50;
                 break;
             case 'd':
-                self.y -= 50;
-                break;
-            case 's':
                 state.x += 50;
                 break;
             case 'a':
@@ -41,11 +41,12 @@ window.onload = () => {
         setCanvasSize(canvas);
         updateCanvas(canvas, 0, 0);
     });
+
+    // dumb game loop for testing
+    setInterval(() => {
+        const canvas = document.getElementById("canvas");
+        updateCanvas(canvas, state.x, state.y);
+    }, 1000 / 30); // 30 FPS
+
 };
 
-// dumb game loop for testing
-setInterval(() => {
-    const canvas = document.getElementById("canvas");
-    var state = new State();
-    updateCanvas(canvas, state.x, state.y);
-}, 1000 / 30); // 30 FPS
