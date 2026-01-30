@@ -32,7 +32,7 @@ class State {
     draw() {
         drawBackground(this.canvas, this.x, this.y);
         this.canvas.ctx.drawImage(
-            this.assets.get(0),
+            this.assets.getSprite(0),
             this.x,
             this.y,
             100,
