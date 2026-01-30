@@ -8,13 +8,6 @@ class State {
     }
 };
 
-window.addEventListener('resize', () => {
-    console.log("Window resized");
-    canvas = document.getElementById("canvas");
-    setCanvasSize(canvas);
-    updateCanvas(canvas, 0, 0);
-});
-
 window.onload = () => {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -41,6 +34,13 @@ window.onload = () => {
         }
     });
     updateCanvas(canvas, state.x, state.y);
+
+    window.addEventListener('resize', () => {
+    console.log("Window resized");
+        canvas = document.getElementById("canvas");
+        setCanvasSize(canvas);
+        updateCanvas(canvas, 0, 0);
+    });
 };
 
 // dumb game loop for testing
