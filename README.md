@@ -28,7 +28,6 @@ or build it yourself.
 
 ```bash
 git clone git@github.com:RiFactor/global-game-jam-26.git
-cd server
-node fileserver.js
+make
 ```
 then navigate [localhost:8000](localhost:8000) in your browser.
