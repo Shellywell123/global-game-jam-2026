@@ -1,5 +1,5 @@
 "use strict";
-import { AssetDeck, onResize, GameMap, ViewPort } from "./canvas.js";
+import { AssetDeck, onResize, GameMap, ViewPort, HUD } from "./canvas.js";
 
 import * as config from "./config.js";
 import {
@@ -33,6 +33,7 @@ class State {
         this.player = null;
 
         this.game_map = new GameMap();
+        this.hud = new HUD();
 
         // This controls where on the map we are drawing things
         this.viewport = new ViewPort(this.canvas);
@@ -108,6 +109,7 @@ class State {
         if (message.player_id !== undefined) {
             console.log(`Player ID set to ${message.player_id}`);
             this.player_id = message.player_id;
+            this.player.player_id = message.player_id;
             return;
         }
 
@@ -168,6 +170,7 @@ class State {
             this.player.vy,
         );
         this.game_map.draw(dt, this.viewport, this.assets);
+
         this.player.draw(dt, this.viewport, this.assets);
         this.other_players.forEach((c) => {
             if (c.active) {
@@ -177,6 +180,13 @@ class State {
         this.characters.forEach((c) => {
             c.draw(dt, this.viewport, this.assets);
         });
+        this.hud.draw(
+            dt,
+            this.viewport,
+            this.assets,
+            this.player,
+            this.other_players,
+        );
     }
 
     // This triggers as a callback.
