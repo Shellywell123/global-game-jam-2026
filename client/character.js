@@ -100,6 +100,7 @@ class Character {
         this.mask_frames = mask_frames;
         // Orientation is the same as Facing
         this.orientation = Facing.DOWN;
+        this.active = true;
 
         this.timer = 0;
         this.draw_state = DrawSate.STATIONARY;
@@ -193,6 +194,18 @@ class Character {
         this.draw_state = DrawSate.MOVING;
         this.vx = (vx / norm) * this.speed;
         this.vy = (vy / norm) * this.speed;
+    }
+
+    // Set update state based on message from server
+    setState(new_state) {
+        this.x = new_state.x;
+        this.y = new_state.y;
+        this.vx = new_state.vx;
+        this.vy = new_state.vy;
+        this.orientation = new_state.orientation;
+        this.draw_state = new_state.draw_state;
+        this.mask = new_state.mask;
+        this.active = new_state.active;
     }
 }
 
