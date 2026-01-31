@@ -9,6 +9,8 @@ import {
     loadAllMaskSprites,
 } from "./character.js";
 
+import { Connection } from "./client.js";
+
 class State {
     constructor(canvas, connection) {
         this.x = 10;
@@ -35,7 +37,9 @@ class State {
         this.viewport = new ViewPort(this.canvas);
 
         // Associate the connection to the server
-        this.conn = connection;
+        this.conn = undefined;
+        // This is set by the server
+        this.player_id = undefined;
 
         // To fix all the movement problems, store the key states and then work
         // out the movement vectors during update.
@@ -78,62 +82,63 @@ class State {
 
         onResize(this.canvas);
 
-        // Start listening for updates
-        this.conn.websocket.addEventListener("message", (e) => {
-            // todo: get the client ID to know the server has registered
-            const message = JSON.parse(e.data);
-
-            // Get the player ID
-            if (message.player_id !== undefined) {
-                this.conn.player_id = message.player_id;
-                return;
-            }
-
-            // Update the characters (enemies)
-            if (message.characters !== undefined) {
-                var n_char = this.characters.length;
-                let new_characters =
-                    message.characters.length - this.characters.length;
-
-                if (new_characters < 0) {
-                    console.error("Missing characters");
-                } else if (new_characters > 0) {
-                    for (let i = 0; i < new_characters; i++) {
-                        this.addCharacter();
-                    }
-                }
-
-                // Update positions of characters on receipt of message
-                for (let i = 0; i < n_char; i++) {
-                    this.characters[i].setState(message.characters[i]);
-                }
-            }
-
-            // Update the players (also enemies, but human controlled)
-            if (message.players !== undefined) {
-                message.players = message.players.filter(
-                    (p) => p.player_id != this.conn.player_id,
-                );
-                var n_players = this.other_players.length;
-                let new_players =
-                    message.players.length - this.other_players.length;
-
-                if (new_players < 0) {
-                    console.error("Missing players");
-                } else if (new_players > 0) {
-                    for (let i = 0; i < new_players; i++) {
-                        this.addPlayer();
-                    }
-                }
-
-                // Update positions of characters on receipt of message
-                for (let i = 0; i < n_players; i++) {
-                    this.other_players[i].setState(message.players[i]);
-                }
-            }
-        });
+        this.conn = new Connection(config.URI, (msg) =>
+            this.onServerMessage(msg),
+        );
 
         console.log("Game ready");
+    }
+
+    onServerMessage(message) {
+        // Get the player ID
+        if (message.player_id !== undefined) {
+            console.log(`Player ID set to ${message.player_id}`);
+            this.player_id = message.player_id;
+            return;
+        }
+
+        // Update the characters (enemies)
+        if (message.characters !== undefined) {
+            var n_char = this.characters.length;
+            let new_characters =
+                message.characters.length - this.characters.length;
+
+            if (new_characters < 0) {
+                console.error("Missing characters");
+            } else if (new_characters > 0) {
+                for (let i = 0; i < new_characters; i++) {
+                    this.addCharacter();
+                }
+            }
+
+            // Update positions of characters on receipt of message
+            for (let i = 0; i < n_char; i++) {
+                this.characters[i].setState(message.characters[i]);
+            }
+        }
+
+        // Update the players (also enemies, but human controlled)
+        if (message.players !== undefined) {
+            message.players = message.players.filter(
+                (p) => p.player_id != this.player_id,
+            );
+            var n_players = this.other_players.length;
+            let new_players =
+                message.players.length - this.other_players.length;
+
+            if (new_players < 0) {
+                console.error("Missing players");
+            } else if (new_players > 0) {
+                for (let i = 0; i < new_players; i++) {
+                    this.addPlayer();
+                }
+            }
+
+            // Update positions of characters on receipt of message
+            for (let i = 0; i < n_players; i++) {
+                this.other_players[i].setState(message.players[i]);
+            }
+        }
     }
 
     // Drawing function. This is automatically called by

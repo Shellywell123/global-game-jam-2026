@@ -1,7 +1,7 @@
 // Client-side code using websockets. no idea what i'm doing
 
 class Connection {
-    constructor(uri) {
+    constructor(uri, messageCallback) {
         this.wsUri = uri;
         this.websocket = new WebSocket(this.wsUri);
         this.ready = false;
@@ -15,8 +15,10 @@ class Connection {
             console.log(`ERROR: ${e}`);
         });
 
-        // TODO: Get the connection ID from the server (somehow)
-        this.player_id = 0;
+        this.websocket.addEventListener("message", (e) => {
+            const message = JSON.parse(e.data);
+            messageCallback(message);
+        });
     }
 
     // Keep pinging the server
