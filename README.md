@@ -22,6 +22,14 @@ Play the latest build [HERE](https://www.youtube.com/watch?v=Aq5WXmQQooo&list=RD
 or build it yourself.
 
 
+# Build
+
+## Docker
+```
+docker compose up
+```
+
+## Make
 ### Requirements
 - [node](https://nodejs.org/en)
 - [make](https://www.gnu.org/software/make/)
