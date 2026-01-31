@@ -9,6 +9,11 @@ const Facing = Object.freeze({
     RIGHT: 3,
 });
 
+const DrawSate = Object.freeze({
+    STATIONARY: 0,
+    MOVING: 1,
+});
+
 // Returns an array of integer indexes for the `asset_deck`.
 // Call as
 //
@@ -45,12 +50,28 @@ class Character {
         this.height = 100;
         this.sprite_frames = sprite_frames;
         // Orientation is the same as Facing
-        this.orientation = Facing.UP;
+        this.orientation = Facing.DOWN;
+
+        this.timer = 0;
+        this.draw_state = DrawSate.STATIONARY;
     }
 
     // Draw the sprite.
     draw(dt, canvas, asset_deck) {
-        const frame_index = this.sprite_frames[this.orientation];
+        this.timer += dt;
+
+        var anim_frame = 0;
+
+        if (this.draw_state == DrawSate.MOVING) {
+            anim_frame = Math.floor(this.timer / 100);
+            if (anim_frame >= 3) {
+                this.timer = 0;
+                anim_frame = 3;
+            }
+        }
+
+        const frame_index =
+            this.sprite_frames[this.orientation * 4 + anim_frame];
         const frame = asset_deck.getSprite(frame_index);
         canvas.ctx.drawImage(frame, this.x, this.y, this.width, this.height);
     }
@@ -59,8 +80,11 @@ class Character {
     update(dt) {
         const norm = Math.sqrt(Math.pow(this.vx, 2) + Math.pow(this.vy, 2));
         if (norm > 0) {
+            this.draw_state = DrawSate.MOVING;
             this.x += (this.vx / norm) * this.speed * dt;
             this.y += (this.vy / norm) * this.speed * dt;
+        } else {
+            this.draw_state = DrawSate.STATIONARY;
         }
     }
 
