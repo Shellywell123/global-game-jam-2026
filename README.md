@@ -52,7 +52,6 @@ then navigate to [localhost:8000](https://localhost:8000) in your browser.
 ### Setup
 
 ```bash
-git clone git@github.com:RiFactor/global-game-jam-26.git
 make
 ```
 then navigate to [localhost:8000](https://localhost:8000) in your browser.
