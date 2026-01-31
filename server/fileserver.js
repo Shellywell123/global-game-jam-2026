@@ -83,13 +83,13 @@ class NonPlayerCharacter {
 
         // Iterate over players until an ACTIVE is found one in range, set them as target
         var dists = new Array();
-        var min_dist = 1e20
-        var potential_target = ""
+        var min_dist = 1e20;
+        var potential_target = "";
         for (var p of players) {
             // skip if wrong mask
             if (p.state.mask != this.state.mask) {
-                continue
-            };
+                continue;
+            }
 
             var dist = Math.sqrt(
                 Math.pow(p.state.x - this.state.x, 2) +
@@ -99,25 +99,23 @@ class NonPlayerCharacter {
             // Skip if distance too big or inactive
             if (dist > this.search_radius) {
                 continue;
-            };
+            }
 
-            if  (!(p.state.active)) {
-                console.log("inactive");
+            if (!p.state.active) {
                 continue;
-            };
+            }
 
             // If dist less than min dist, switch potential target
-            console.log(`dist: ${dist}, mindist ${min_dist}`)
+            console.log(`dist: ${dist}, mindist ${min_dist}`);
             if (dist << min_dist) {
-                console.log(`setting new target ${p.state.player_id}`)
-                min_dist = dist
-                this.target = p.state.player_id
-            };
-        };
+                min_dist = dist;
+                this.target = p.state.player_id;
+            }
+        }
         // Now set the target
-        console.log(`target: ${this.target}`)
-        return
-        this.target = potential_target
+        console.log(`target: ${this.target}`);
+        return;
+        this.target = potential_target;
     }
 
     // Set new vx, vy based on relative direction of player.
@@ -128,12 +126,11 @@ class NonPlayerCharacter {
 
         if (dx == 0 && dy == 0) {
             // if both dx and dy are 0, reassign to a random number to avoid div by 0 below
-            dx = Math.random() - 0.5
-            dy = Math.random() - 0.5
+            dx = Math.random() - 0.5;
+            dy = Math.random() - 0.5;
         }
 
-        const speed_fact =
-            speed / Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
+        const speed_fact = speed / Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
 
         this.state.vx = dx * speed_fact;
         this.state.vy = dy * speed_fact;
@@ -142,7 +139,7 @@ class NonPlayerCharacter {
     // Check that the target is still valid
     checkTarget(target) {
         // Only check if actually following
-        if (this.target !== undefined){ 
+        if (this.target !== undefined) {
             // Mask check
             if (target.state.mask != this.state.mask) {
                 this.target = undefined;
