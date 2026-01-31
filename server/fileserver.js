@@ -48,41 +48,63 @@ async function requestHandler(req, res) {
     // console.log(`${req.method} ${req.url} ${status_code}`);
 }
 
-class PlayerState {
-    constructor(socket) {
+class CharacterState {
+    player_id = "";
+    x = 0;
+    y = 0;
+    vx = 0;
+    vy = 0;
+    orientation = 0;
+    draw_state = 0;
+    mask = 0;
+}
+
+class NonPlayerCharacter {
+    constructor() {
+        this.state = new CharacterState();
+    }
+}
+
+class PlayerHandler {
+    constructor(socket, player_id) {
         this.socket = socket;
-        this.x = 0;
-        this.y = 0;
-        this.orientation = 0;
-        this.draw_state = 0;
-        this.mask = 0;
+        this.state = new CharacterState();
+        this.state.player_id = player_id;
     }
 
     // Update the player state from an incoming message.
-    handleMessage(data) {
+    async handleMessage(data) {
         const msg = JSON.parse(data).content;
-        this.x = msg.x;
-        this.y = msg.y;
-        this.orientation = msg.orientation;
-        this.draw_state = msg.draw_state;
-        this.mask = msg.mask;
+        this.state.x = msg.x;
+        this.state.y = msg.y;
+        this.state.vx = msg.vx;
+        this.state.vy = msg.vy;
+        this.state.orientation = msg.orientation;
+        this.state.draw_state = msg.draw_state;
+        this.state.mask = msg.mask;
     }
 }
 
 class ServerState {
     constructor(server, websocket_server) {
-        this.players = new Map();
+        this.players = new Array();
+        this.npcs = new Array();
         this.server = server;
         this.websocket_server = websocket_server;
     }
 
-    onClientConnection(socket, req) {
+    newNPC({ x = 0, y = 0 } = {}) {
+        var npc = new NonPlayerCharacter();
+        this.npcs.push(npc);
+    }
+
+    async onClientConnection(socket, req) {
         const ip = req.socket.remoteAddress;
         const port = req.socket._peername.port;
 
         const player_id = `${ip}:${port}`;
-        const player = new PlayerState(socket);
-        this.players.set(player_id, player);
+        const player = new PlayerHandler(socket, player_id);
+        this.players.push(player);
 
         console.log(`Websocket connected from ${ip}:${port}`);
 
@@ -93,12 +115,28 @@ class ServerState {
         socket.send(JSON.stringify({ player_id: player_id }));
     }
 
+    // Broadcast all positions to all players
+    async broadcastUpdates() {
+        const message = JSON.stringify({
+            players: this.players.map((p) => p.state),
+            characters: this.npcs.map((c) => c.state),
+        });
+
+        return this.players.map(async (player) => {
+            player.socket.send(message);
+        });
+    }
+
     bind(port) {
         this.websocket_server.on("connection", (socket, req) =>
             this.onClientConnection(socket, req),
         );
         this.server.listen(port);
         console.log(`Server running at http://127.0.0.1:${PORT}/`);
+        // triger periodically broadcasting all character states
+        setInterval(async () => {
+            await this.broadcastUpdates();
+        }, 1000 / 10); // call 10 times a second
     }
 }
 
