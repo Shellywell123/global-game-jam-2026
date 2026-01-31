@@ -7,7 +7,12 @@ import {
 } from "./canvas.js";
 
 import * as config from "./config.js";
-import { Character, Facing, loadPlayerSprites } from "./character.js";
+import {
+    Character,
+    Facing,
+    loadPlayerSprites,
+    loadAllMaskSprites,
+} from "./character.js";
 
 class State {
     constructor(canvas) {
@@ -31,10 +36,12 @@ class State {
 
     // Entry point to start the game
     async start() {
-        const player_sprites = await loadPlayerSprites(this.assets);
+        const character_sprites = await loadPlayerSprites(this.assets);
+        const mask_sprites = await loadAllMaskSprites(this.assets);
+        console.log(mask_sprites);
 
-        this.characters.push(new Character(player_sprites));
-        this.player = new Character(player_sprites);
+        // this.characters.push(new Character(character_sprites, mask_sprites));
+        this.player = new Character(character_sprites, mask_sprites);
 
         setCanvasSize(this.canvas);
         console.log("Game ready");
