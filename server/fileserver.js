@@ -193,32 +193,29 @@ class NonPlayerCharacter {
         }
 
         // Choose facing direction based on vx, vy
-        const angle = Math.atan2(this.state.vx, this.state.vy)
-        // up: pi, right: pi/2, down: 0, left: -pi/2, 
+        const angle = Math.atan2(this.state.vx, this.state.vy);
+        // up: pi, right: pi/2, down: 0, left: -pi/2,
 
         // Facing up
-        if (Math.abs(angle) >= (3*Math.PI/4)) {
-            console.log("UP")
-            this.state.orientation = Facing.UP
+        if (Math.abs(angle) >= (3 * Math.PI) / 4) {
+            console.log("UP");
+            this.state.orientation = Facing.UP;
         }
         // Left
-        else if (-Math.PI/4 >= angle && angle > -3*Math.PI/4) {
-            console.log("LEFT")
-            this.state.orientation = Facing.LEFT
+        else if (-Math.PI / 4 >= angle && angle > (-3 * Math.PI) / 4) {
+            console.log("LEFT");
+            this.state.orientation = Facing.LEFT;
         }
         // Down
-        else if (-Math.PI/4 < angle && angle < Math.PI/4) {
-            console.log("DOWN")
-            this.state.orientation = Facing.DOWN
+        else if (-Math.PI / 4 < angle && angle < Math.PI / 4) {
+            console.log("DOWN");
+            this.state.orientation = Facing.DOWN;
         }
         // Right
-        else if (Math.PI/4 <= angle && angle < 3*Math.PI/4) {
-            console.log("RIGHt")
-            this.state.orientation = Facing.RIGHT
-        };
-
-        console.log(`Orientation: ${this.state.orientation}, angle: ${angle}`)
-
+        else if (Math.PI / 4 <= angle && angle < (3 * Math.PI) / 4) {
+            console.log("RIGHt");
+            this.state.orientation = Facing.RIGHT;
+        }
     }
 }
 
@@ -258,7 +255,7 @@ class ServerState {
         npc.state.vx = (Math.random() - 0.5) * 0.1;
         npc.state.vy = (Math.random() - 0.5) * 0.1;
         npc.speed *= gaussianRandom(1.0, 0.1);
-        npc.state.draw_state = 1
+        npc.state.draw_state = 1;
 
         // HACK: adding some slight randomness to npc start position to avoid div by 0 issues later
         npc.state.x =
