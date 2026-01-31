@@ -25,16 +25,23 @@ export class AssetDeck {
         var r = Math.abs(this.gaussianRandom());
         var g = Math.abs(this.gaussianRandom());
         var b = Math.abs(this.gaussianRandom());
-        var normalisation = 255.0 / Math.sqrt(r*r + g*g + b*b);
+        var normalisation = 255.0 / Math.sqrt(r * r + g * g + b * b);
         var normalised_r = Math.round(r * normalisation);
         var normalised_g = Math.round(g * normalisation);
         var normalised_b = Math.round(b * normalisation);
-        return "#" + this.toDoubleHex(normalised_r) + this.toDoubleHex(normalised_g) + this.toDoubleHex(normalised_b);
+        return (
+            "#" +
+            this.toDoubleHex(normalised_r) +
+            this.toDoubleHex(normalised_g) +
+            this.toDoubleHex(normalised_b)
+        );
     }
 
     // Gets or generates the fill tint for a given key.
     getOrCreateTint(tint_key) {
-        return this.tint_buffer.getOrInsertComputed(tint_key, (key) => this.randomTint());
+        return this.tint_buffer.getOrInsertComputed(tint_key, (key) =>
+            this.randomTint(),
+        );
     }
 
     // Preload an image. Example usage is
@@ -50,16 +57,16 @@ export class AssetDeck {
             image.onload = () => {
                 console.log(`Asset fetched: ${uri}`);
                 var subcanvas = new OffscreenCanvas(image.width, image.height);
-                var draw_context = subcanvas.getContext("2d")
+                var draw_context = subcanvas.getContext("2d");
                 draw_context.drawImage(image, 0, 0);
                 draw_context.fillStyle = this.getOrCreateTint(tint_key);
-                draw_context.globalCompositeOperation = 'multiply';
+                draw_context.globalCompositeOperation = "multiply";
                 draw_context.fillRect(0, 0, image.width, image.height);
                 var tinted_bitmap = subcanvas.transferToImageBitmap();
                 draw_context.clearRect(0, 0, image.width, image.height);
-                draw_context.globalCompositeOperation = 'source-over';
+                draw_context.globalCompositeOperation = "source-over";
                 draw_context.drawImage(image, 0, 0);
-                draw_context.globalCompositeOperation = 'source-in';
+                draw_context.globalCompositeOperation = "source-in";
                 draw_context.drawImage(tinted_bitmap, 0, 0);
                 this.sprite_buffer.push(subcanvas.transferToImageBitmap());
                 const index = this.sprite_buffer.length - 1;
