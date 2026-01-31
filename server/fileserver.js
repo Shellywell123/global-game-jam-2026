@@ -109,16 +109,11 @@ class NonPlayerCharacter {
             }
 
             // If dist less than min dist, switch potential target
-            console.log(`dist: ${dist}, mindist ${min_dist}`);
-            if (dist << min_dist) {
+            if (dist < min_dist) {
                 min_dist = dist;
                 this.target = p.state.player_id;
             }
         }
-        // Now set the target
-        console.log(`target: ${this.target}`);
-        return;
-        this.target = potential_target;
     }
 
     // Set new vx, vy based on relative direction of player.
