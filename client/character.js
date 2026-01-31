@@ -50,7 +50,7 @@ async function loadPlayerSprites(
 //
 // is the jth orientation of the ith mask.
 
-const masks = ["arlecchino", "il-dottore", "scaramouche"];
+const masks = ["arlecchino", "il-dottore", "scaramouche"]; // can remove??
 // TODO scaramouche offset
 
 async function loadAllMaskSprites(
@@ -146,7 +146,7 @@ class Character {
         );
     }
 
-    count = (3 - 1); // hardcoded but could actually count the number of masks
+    count = (masks.length - 1);
 
     prevMask() {
         console.log("prev mask");
