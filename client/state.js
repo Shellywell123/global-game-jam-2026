@@ -54,6 +54,7 @@ class State {
         const character_masks = await loadAllMaskSprites(this.assets);
         const enemy_masks = await loadAllMaskSprites(this.assets, {
             character: "enemy",
+            mask_name: "arlecchino"
         });
 
         this.characters.push(new Character(enemy_sprites, enemy_masks));
