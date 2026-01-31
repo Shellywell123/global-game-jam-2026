@@ -4,7 +4,7 @@ const path = require("path");
 const createServer = require("http");
 const WebSocketServer = require("ws");
 
-const server = createServer();
+const server = createServer(); // error: not a function...
 const wss = new WebSocketServer({noServer: true});
 
 
