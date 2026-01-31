@@ -24,12 +24,12 @@ or build it yourself.
 
 # Build
 
-## Docker
+## ![](https://www.docker.com/app/uploads/2024/02/cropped-docker-logo-favicon-180x180.png) Docker
 ```
 docker compose up
 ```
 
-## Make
+## ![](https://www.gnu.org/graphics/heckert_gnu.transp.small.png) Make
 ### Requirements
 - [node](https://nodejs.org/en)
 - [make](https://www.gnu.org/software/make/)
