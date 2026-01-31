@@ -1,9 +1,5 @@
 "use strict";
-import {
-    AssetDeck,
-    setCanvasSize,
-    drawBackground,
-} from "./canvas.js";
+import { AssetDeck, setCanvasSize, drawBackground } from "./canvas.js";
 
 // Define updateCanvas locally to avoid import errors
 function updateCanvas(canvas, x, y) {
@@ -38,7 +34,7 @@ class State {
         this.player = null;
 
         // Associate the connection to the server
-        this.conn = connection
+        this.conn = connection;
     }
 
     // Entry point to start the game
@@ -46,6 +42,7 @@ class State {
         const character_sprites = await loadPlayerSprites(this.assets);
         const enemy_sprites = await loadPlayerSprites(this.assets, {
             character: "enemy",
+            tint_key: "arlecchino",
         });
         const character_masks = await loadAllMaskSprites(this.assets);
         const enemy_masks = await loadAllMaskSprites(this.assets, {
@@ -97,11 +94,10 @@ class State {
                 break;
             default:
                 console.log(e.key);
-        };
+        }
 
         // After updating the movement, send updated position to server
-        this.conn.send(this.player)
-
+        this.conn.send(this.player);
     }
 
     // Called whenever the window is resized.
