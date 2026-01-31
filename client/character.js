@@ -171,6 +171,23 @@ class Character {
             return;
         }
 
+        if (vy == 0) {
+            if (vx > 0) {
+                this.orientation = Facing.RIGHT;
+            }
+            else {
+                this.orientation = Facing.LEFT;
+            }
+        }
+        if (vx == 0) {
+            if (vy > 0) {
+                this.orientation = Facing.DOWN;
+            }
+            else {
+                this.orientation = Facing.UP;
+            }
+        }
+
         const norm = utils.magnitude(vx, vy);
         this.draw_state = DrawSate.MOVING;
         this.vx = (vx / norm) * this.speed;
