@@ -11,6 +11,8 @@ One file to loosely rule them all.
         "x_pos" : 150
         "y_pos" : 200
         "orientation": 0 
+        "moving": ...
+        "mask: ...
     }
 }
 ```
