@@ -1,6 +1,10 @@
 // This is how you import in a really basic way
 import { State } from "./state.js";
-import { isMobile, addDpadToScreen, addActionsButtonsToScreen} from "./mobile.js";
+import {
+    isMobile,
+    addDpadToScreen,
+    addActionsButtonsToScreen,
+} from "./mobile.js";
 
 window.onload = () => {
     document.addEventListener("dblclick", function (e) {
@@ -15,7 +19,6 @@ window.onload = () => {
     var state = new State(canvas);
 
     if (isMobile()) {
-        
         const canvas = document.getElementById("canvas");
         // Example: make canvas fill most of the viewport
         canvas.style.width = "98vw";

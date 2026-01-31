@@ -1,9 +1,16 @@
-
 export function isMobile() {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     // Check for common mobile device indicators in the user agent string
     const mobileIndicators = [
-        "Android", "webOS", "iPhone", "iPad", "iPod", "BlackBerry", "Windows Phone", "Opera Mini", "IEMobile"
+        "Android",
+        "webOS",
+        "iPhone",
+        "iPad",
+        "iPod",
+        "BlackBerry",
+        "Windows Phone",
+        "Opera Mini",
+        "IEMobile",
     ];
     for (const indicator of mobileIndicators) {
         if (ua.includes(indicator)) {
@@ -18,7 +25,7 @@ export function addDpadToScreen(state) {
     dpad.id = "dpad";
     dpad.style.position = "absolute";
     dpad.style.top = "60%";
-    dpad.style.left = "20%"
+    dpad.style.left = "20%";
     dpad.style.transform = "translateX(-50%)";
     dpad.style.width = "240px";
     dpad.style.height = "240px";
@@ -75,8 +82,7 @@ export function addDpadToScreen(state) {
 }
 
 export function addActionsButtonsToScreen(state) {
-
-// a button 
+    // a button
     const actionButtons = document.createElement("div");
 
     // a button
@@ -88,7 +94,7 @@ export function addActionsButtonsToScreen(state) {
     aButton.style.right = "10%";
     aButton.style.width = "80px";
     aButton.style.height = "80px";
-    
+
     // aButton.onpointerdown = () => {
     //     console.log("A button pressed");
     //     // Implement A button functionality here
@@ -104,7 +110,7 @@ export function addActionsButtonsToScreen(state) {
     bButton.style.right = "20%";
     bButton.style.width = "80px";
     bButton.style.height = "80px";
-    
+
     // bButton.onpointerdown = () => {
     //     console.log("B button pressed");
     //     // Implement B button functionality here
@@ -113,4 +119,3 @@ export function addActionsButtonsToScreen(state) {
 
     document.body.appendChild(actionButtons);
 }
-
