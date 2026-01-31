@@ -104,7 +104,7 @@ export class AssetDeck {
 }
 
 function ChessboardPattern(ctx, canvas, asset_bank) {
-    const squareSize = 50;
+    const squareSize = 48;
     const rows = Math.ceil(canvas.height / squareSize);
     const cols = Math.ceil(canvas.width / squareSize);
 
@@ -148,7 +148,7 @@ export function drawBackground(canvas, asset_bank) {
         asset_bank.getOrCreateTint("text"),
         "50px Arial",
         "Welcome to our lil game, you can control the lil guy with lil WASD keys!",
-        100,
-        100,
+        98,
+        98,
     );
 }
