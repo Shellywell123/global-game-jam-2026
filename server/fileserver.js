@@ -113,6 +113,12 @@ class NonPlayerCharacter {
         const dy = target.state.y - this.state.y;
         const dx = target.state.x - this.state.x;
 
+        if (dx == 0 && dy == 0) {
+            // if both dx and dy are 0, reassign to a random number to avoid div by 0 below
+            dx = Math.random() - 0.5
+            dy = Math.random() - 0.5
+        }
+        
         const speed_fact =
             speed / Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
 
