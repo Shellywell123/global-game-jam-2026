@@ -50,7 +50,7 @@ class State {
     // Drawing function. This is automatically called by
     // `requestAnimationFrame`.
     draw(dt) {
-        drawBackground(this.canvas, this.x, this.y);
+        drawBackground(this.canvas, this.assets);
 
         this.player.draw(dt, this.canvas, this.assets);
 

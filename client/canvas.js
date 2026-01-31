@@ -138,11 +138,11 @@ export function initializeCanvas(canvas) {
     setCanvasSize(canvas);
 }
 
-export function drawBackground(canvas) {
+export function drawBackground(canvas, asset_bank) {
     ChessboardPattern(canvas.ctx, canvas);
     renderText(
         canvas.ctx,
-        "red",
+        asset_bank.getOrCreateTint("text"),
         "50px Arial",
         "Welcome to our lil game, you can control the lil guy with lil WASD keys!",
         100,
