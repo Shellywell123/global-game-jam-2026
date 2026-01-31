@@ -98,6 +98,7 @@ class Character {
         this.width = 96;
         this.height = 96;
         this.sprite_frames = sprite_frames;
+        this.mask = 0;
         this.mask_frames = mask_frames;
         // Orientation is the same as Facing
         this.orientation = Facing.DOWN;

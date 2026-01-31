@@ -18,6 +18,7 @@ class State {
         this.vx = 0;
         this.vy = 0;
         this.orientation = 0;
+        this.mask = 0;
         // Save the passed canvas
         this._main_canvas = canvas;
         this._main_canvas.ctx = canvas.getContext("2d");
