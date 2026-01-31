@@ -35,10 +35,6 @@ class State {
 
         // Associate the connection to the server
         this.conn = connection;
-        this.conn.websocket.addEventListener("message", function message(e) {
-            const message = JSON.parse(e.data);
-            console.log(`RECEIVED: ${e.data}`);
-        });
 
         // To fix all the movement problems, store the key states and then work
         // out the movement vectors during update.
@@ -61,6 +57,7 @@ class State {
         });
 
         this.characters.push(new Character(enemy_sprites, enemy_masks));
+        console.log(`${this.characters[0].x}`)
 
         this.player = new Character(character_sprites, character_masks);
         // This is just a placeholder calculation to center the player in the viewport
@@ -68,6 +65,22 @@ class State {
         this.player.y = this.viewport.height / 2 - 50;
 
         onResize(this.canvas);
+
+        // Start listening for updates
+        this.conn.websocket.addEventListener("message", (e) => {
+            const message = JSON.parse(e.data);
+            console.log(`RECEIVED: ${e.data}`);
+
+            // Update positions of characters on receipt of message
+            let n_char = this.characters.length;
+            for (let i = 0; i < n_char; i++){
+                this.characters[i].x = message.content.x_pos
+                this.characters[i].y = message.content.y_pos
+                this.characters[i].orientation = message.content.orientation
+                this.characters[i].mask = message.content.mask                
+            }
+        });
+
         console.log("Game ready");
     }
 
