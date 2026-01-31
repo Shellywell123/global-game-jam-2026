@@ -39,13 +39,13 @@ or build it yourself.
 # Build
 You can build this project with docker or make.
 
-## 1) Docker <a><img src="https://www.docker.com/app/uploads/2024/02/cropped-docker-logo-favicon-180x180.png" width="45"/></a>
+## <a><img src="https://www.docker.com/app/uploads/2024/02/cropped-docker-logo-favicon-180x180.png" width="45"/></a> Docker 
 ```
 docker compose up
 ```
 then navigate to [localhost:8000](https://localhost:8000) in your browser.
 
-## 2) Make <a><img src="https://www.gnu.org/graphics/heckert_gnu.transp.small.png" width="45"/></a>
+## <a><img src="https://www.gnu.org/graphics/heckert_gnu.transp.small.png" width="45"/></a> Make
 ### Requirements
 - [node](https://nodejs.org/en)
 - [make](https://www.gnu.org/software/make/)
