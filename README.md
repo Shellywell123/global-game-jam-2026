@@ -17,7 +17,7 @@
 <td>
   
 <a href="https://shellywell123.github.io/Grind-Boy.gb/build/web/index.html"> <!-- TODO update with actual game link -->
-  <img src="https://github.com/Shellywell123/Grind-Boy.gb/blob/GB-Studio-3.1/assets/screenshots/DemoV1.1.gif" width="175" /> <!-- TODO update with actual gameplay gif -->
+  <img src="https://www.nopcommerce.com/images/thumbs/0005720_coming-soon-page_550.jpeg" width="175" /> <!-- TODO update with actual gameplay gif -->
 </a>
   
 </pre>
