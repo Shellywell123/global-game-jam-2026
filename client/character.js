@@ -29,7 +29,7 @@ async function loadPlayerSprites(asset_deck, { character = "player" } = {}) {
     const left = fetch_facing("left");
     const right = fetch_facing("right");
 
-    return await Promise.all(front.concat(back, left, right));
+    return await Promise.all(back.concat(front, left, right));
 }
 
 class Character {
