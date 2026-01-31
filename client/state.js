@@ -111,11 +111,14 @@ class State {
 
             // Update the players (also enemies, but human controlled)
             if (message.players !== undefined) {
+                message.players = message.players.filter(
+                    (p) => p.player_id != this.conn.player_id,
+                );
                 var n_players = this.other_players.length;
                 let new_players =
                     message.players.length - this.other_players.length;
 
-                if (new_characters < 0) {
+                if (new_players < 0) {
                     console.error("Missing players");
                 } else if (new_players > 0) {
                     for (let i = 0; i < new_players; i++) {
@@ -147,6 +150,9 @@ class State {
         );
         this.game_map.draw(dt, this.viewport, this.assets);
         this.player.draw(dt, this.viewport, this.assets);
+        this.other_players.forEach((c) => {
+            c.draw(dt, this.viewport, this.assets);
+        });
         this.characters.forEach((c) => {
             c.draw(dt, this.viewport, this.assets);
         });

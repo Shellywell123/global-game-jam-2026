@@ -93,8 +93,10 @@ class ServerState {
         this.websocket_server = websocket_server;
     }
 
-    newNPC({ x = 0, y = 0 } = {}) {
+    newNPC({ x = 400, y = 300 } = {}) {
         var npc = new NonPlayerCharacter();
+        npc.state.vx = (Math.random() - 0.5) * 0.1;
+        npc.state.vy = (Math.random() - 0.5) * 0.1;
         this.npcs.push(npc);
     }
 
@@ -115,6 +117,13 @@ class ServerState {
         socket.send(JSON.stringify({ player_id: player_id }));
     }
 
+    updateNPCs(dt) {
+        this.npcs.forEach((c) => {
+            c.state.x += c.state.vx * dt;
+            c.state.y += c.state.vy * dt;
+        });
+    }
+
     // Broadcast all positions to all players
     async broadcastUpdates() {
         const message = JSON.stringify({
@@ -133,6 +142,16 @@ class ServerState {
         );
         this.server.listen(port);
         console.log(`Server running at http://127.0.0.1:${PORT}/`);
+
+        this.newNPC();
+
+        var previous_time = Date.now();
+        setInterval(async () => {
+            const now = Date.now();
+            this.updateNPCs(now - previous_time);
+            previous_time = now;
+        }, 1000 / 30); // call 30 times a second
+
         // triger periodically broadcasting all character states
         setInterval(async () => {
             await this.broadcastUpdates();
