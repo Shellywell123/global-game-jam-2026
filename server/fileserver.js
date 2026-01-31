@@ -118,7 +118,7 @@ class NonPlayerCharacter {
             dx = Math.random() - 0.5
             dy = Math.random() - 0.5
         }
-        
+
         const speed_fact =
             speed / Math.sqrt(Math.pow(dy, 2) + Math.pow(dx, 2));
 
@@ -128,18 +128,24 @@ class NonPlayerCharacter {
 
     // Check that the target is still valid
     checkTarget(target) {
-        // Mask check
-        if (target.state.mask != this.state.mask) {
-            this.target = undefined;
-            return;
-        }
+        // Only check if actually following
+        if (this.target !== undefined){ 
+            // Mask check
+            if (target.state.mask != this.state.mask) {
+                this.target = undefined;
+            }
 
-        // Active check
-        if (!target.state.active) {
-            this.target = undefined;
-            this.state.vx = this.state.vx * 0.1;
-            this.state.vy = this.state.vy * 0.1;
-            return;
+            // Active check
+            if (!target.state.active) {
+                this.target = undefined;
+            }
+
+            // If not following anyone, slow down to 50% and drift
+            if (this.target == undefined) {
+                this.state.vx = this.state.vx * 0.1;
+                this.state.vy = this.state.vy * 0.1;
+                return;
+            }
         }
     }
 
