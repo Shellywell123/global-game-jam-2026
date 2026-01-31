@@ -15,7 +15,7 @@ import {
 } from "./character.js";
 
 class State {
-    constructor(canvas) {
+    constructor(canvas, connection) {
         this.x = 10;
         this.y = 10;
         this.vx = 0;
@@ -32,16 +32,25 @@ class State {
         this.characters = new Array();
         // The player controlled character
         this.player = null;
+
+        // Associate the connection to the server
+        this.conn = connection
     }
 
     // Entry point to start the game
     async start() {
         const character_sprites = await loadPlayerSprites(this.assets);
-        const mask_sprites = await loadAllMaskSprites(this.assets);
-        console.log(mask_sprites);
+        const enemy_sprites = await loadPlayerSprites(this.assets, {
+            character: "enemy",
+        });
+        const character_masks = await loadAllMaskSprites(this.assets);
+        const enemy_masks = await loadAllMaskSprites(this.assets, {
+            character: "enemy",
+        });
 
-        // this.characters.push(new Character(character_sprites, mask_sprites));
-        this.player = new Character(character_sprites, mask_sprites);
+        this.characters.push(new Character(enemy_sprites, enemy_masks));
+
+        this.player = new Character(character_sprites, character_masks);
 
         setCanvasSize(this.canvas);
         console.log("Game ready");
@@ -84,12 +93,11 @@ class State {
                 break;
             default:
                 console.log(e.key);
-        }
+        };
 
-        const socket = new WebSocket('ws://localhost:8000/ws');
-        socket.addEventListener('open', () => {
-            socket.send(`ben-test Key ${e.key} is now ${active}`);
-        });
+        // After updating the movement, send updated position to server
+        this.conn.send(this.player)
+
     }
 
     // Called whenever the window is resized.
