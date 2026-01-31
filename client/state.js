@@ -69,7 +69,7 @@ class State {
             this.player.y,
             this.player.speed,
         );
-        this.game_map.draw(dt, this.canvas);
+        this.game_map.draw(dt, this.viewport, this.assets);
         this.player.draw(dt, this.viewport, this.assets);
         this.characters.forEach((c) => {
             c.draw(dt, this.viewport, this.assets);

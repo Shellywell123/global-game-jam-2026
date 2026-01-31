@@ -106,10 +106,10 @@ export class AssetDeck {
     }
 }
 
-function ChessboardPattern(ctx, canvas, asset_bank) {
+function ChessboardPattern(ctx, canvas, asset_bank, x, y) {
     const squareSize = 50;
-    const rows = Math.ceil(canvas.height / squareSize);
-    const cols = Math.ceil(canvas.width / squareSize);
+    const rows = 100;
+    const cols = 100;
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -119,8 +119,8 @@ function ChessboardPattern(ctx, canvas, asset_bank) {
                 ctx.fillStyle = asset_bank.getOrCreateTint("white");
             }
             ctx.fillRect(
-                col * squareSize,
-                row * squareSize,
+                col * squareSize + x,
+                row * squareSize + y,
                 squareSize,
                 squareSize,
             );
@@ -139,20 +139,21 @@ export function onResize(canvas) {
     canvas.height = 600;
 }
 
-export function initializeCanvas(canvas) {
-    const ctx = canvas.getContext("2d");
-    setCanvasSize(canvas);
-}
-
-export function drawBackground(canvas, asset_bank) {
-    ChessboardPattern(canvas.ctx, canvas, asset_bank);
-    renderText(
-        canvas.ctx,
-        asset_bank.getOrCreateTint("text"),
-        "50px Arial",
-        "Welcome to our lil game, you can control the lil guy with lil WASD keys!",
-        100,
-        100,
+function drawBackground(viewport, asset_bank) {
+    viewport.draw(
+        (canvas, x, y) => {
+            ChessboardPattern(canvas.ctx, canvas, asset_bank, x, y);
+            renderText(
+                canvas.ctx,
+                "red",
+                "50px Arial",
+                "Welcome to our lil game, you can control the lil guy with lil WASD keys!",
+                x + 100,
+                y + 100,
+            );
+        },
+        0,
+        0,
     );
 }
 
@@ -160,7 +161,7 @@ export class GameMap {
     constructor() {}
 
     draw(dt, canvas, asset_deck) {
-        drawBackground(canvas);
+        drawBackground(canvas, asset_deck);
     }
 }
 
