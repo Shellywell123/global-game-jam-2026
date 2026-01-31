@@ -42,9 +42,10 @@ export class AssetDeck {
 
     // Gets or generates the fill tint for a given key.
     getOrCreateTint(tint_key) {
-        return this.tint_buffer.getOrInsertComputed(tint_key, (key) =>
-            this.randomTint(),
-        );
+        if (!this.tint_buffer.has(tint_key)) {
+            this.tint_buffer.set(tint_key, this.randomTint());
+        }
+        return this.tint_buffer.get(tint_key);
     }
 
     // Preload an image. Example usage is
