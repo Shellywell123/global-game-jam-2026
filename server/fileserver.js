@@ -32,13 +32,6 @@ function lookupPath(url_path) {
     return url_path;
 }
 
-function gaussianRandom(mu, sigma) {
-    const u = 1 - Math.random();
-    const v = Math.random();
-    const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-    return z * sigma + mu;
-}
-
 async function requestHandler(req, res) {
     if (req.url == "/ws") return; // it's already been upgraded
 
@@ -181,8 +174,8 @@ class NonPlayerCharacter {
             this.updateVelocity(target_player);
         } else {
             // Drift in roughly the same direction as before
-            this.state.vx = this.state.vx + gaussianRandom(0, 0.001);
-            this.state.vy = this.state.vy + gaussianRandom(0, 0.001);
+            this.state.vx = this.state.vx + utils.gaussianRandom(0, 0.001);
+            this.state.vy = this.state.vy + utils.gaussianRandom(0, 0.001);
         }
 
         // Choose facing direction based on vx, vy
@@ -237,13 +230,17 @@ class ServerState {
 
         this.map_width_tiles = 0;
         this.map_height_tiles = 0;
+
+        this.spawn_round = 1;
+        this.spawn_frequency = 5;
+        this.spawn_increment = 20;
     }
 
     newNPC() {
         var npc = new NonPlayerCharacter();
         npc.state.vx = (Math.random() - 0.5) * 0.1;
         npc.state.vy = (Math.random() - 0.5) * 0.1;
-        npc.speed *= gaussianRandom(1.0, 0.1);
+        npc.speed *= utils.gaussianRandom(1.0, 0.1);
         npc.state.draw_state = 1;
         // TODO: bump this number when we add more masks
         npc.state.mask = utils.randomSelect([0, 1, 2]);
@@ -343,6 +340,20 @@ class ServerState {
         setInterval(async () => {
             await this.broadcastUpdates();
         }, 1000 / 10); // call 10 times a second
+
+        // Periodically spawn new NPCs
+        setInterval(async () => {
+            const spawn_amount = utils.gaussianRandom(
+                this.spawn_round,
+                1 * Math.sqrt(this.spawn_round),
+            );
+
+            this.spawn_round += this.spawn_increment;
+
+            for (let i = 0; i < spawn_amount; i += 1) {
+                this.newNPC();
+            }
+        }, 1000 * this.spawn_frequency);
     }
 }
 
