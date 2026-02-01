@@ -88,11 +88,16 @@ class State {
         };
 
         this.addPlayer = async (character) => {
-            let player_sprites = await loadPlayerSprites(this.assets, {
+            let player_assets = await Promise.all([
+                loadPlayerSprites(this.assets, {
 		    tint_key: character.player_id
-	    });
+	        }),
+                loadAllMaskSprites(this.assets, {
+		    tint_key: character.player_id
+	        }),
+	    ]);
             this.other_players.push(
-                new Character(player_sprites, character_masks),
+                new Character(player_assets[0], character_masks, player_assets[1]),
             );
         };
 

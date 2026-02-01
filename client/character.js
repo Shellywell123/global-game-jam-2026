@@ -51,13 +51,13 @@ async function loadPlayerSprites(
 //
 // is the jth orientation of the ith mask.
 
-async function loadAllMaskSprites(asset_deck, { character = "player" } = {}) {
+async function loadAllMaskSprites(asset_deck, { character = "player", tint_key = null } = {}) {
     const orientations = ["front", "left", "right"];
     const fetchMask = (name) => {
         return orientations.map(async (i) => {
             return asset_deck.fetchImage(
                 `assets/${character}/masks/${name}/${i}.png`,
-                name,
+                tint_key ? tint_key : name,
             );
         });
     };
