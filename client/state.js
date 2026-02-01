@@ -149,7 +149,9 @@ class State {
 
         // Load game music (optional - game will work without it)
         try {
-            const music_index = await this.assets.fetchAudio("/assets/music/game-zone-320262.mp3");
+            const music_index = await this.assets.fetchAudio(
+                "/assets/music/game-zone-320262.mp3",
+            );
             this.gameMusic = this.assets.getAudio(music_index);
             this.gameMusic.loop = true;
             this.gameMusic.volume = 0.5;
@@ -170,7 +172,11 @@ class State {
     async onServerMessage(message) {
         // Leaderboard update
         if (message.leaderboard !== undefined) {
-            console.log("Leaderboard updated:", message.leaderboard.length, "entries");
+            console.log(
+                "Leaderboard updated:",
+                message.leaderboard.length,
+                "entries",
+            );
             this.leaderboard = message.leaderboard;
             // Update player rank from server if provided
             if (
@@ -182,7 +188,7 @@ class State {
             // Recalculate rank if player is already dead and in the leaderboard
             if (this.game_state === GameState.GAME_OVER && this.player_id) {
                 const foundIndex = this.leaderboard.findIndex(
-                    (entry) => entry.player_id === this.player_id
+                    (entry) => entry.player_id === this.player_id,
                 );
                 if (foundIndex !== -1) {
                     this.playerRank = foundIndex + 1;
@@ -201,7 +207,9 @@ class State {
             this.gameStartTime = Date.now();
             // Play the game music
             if (this.gameMusic) {
-                this.gameMusic.play().catch(e => console.log("Audio play failed:", e));
+                this.gameMusic
+                    .play()
+                    .catch((e) => console.log("Audio play failed:", e));
             }
             return;
         }

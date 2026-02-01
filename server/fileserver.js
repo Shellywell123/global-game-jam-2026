@@ -274,11 +274,11 @@ class ServerState {
         this.interval_broadcast = undefined;
 
         // IDs for masks, updated dynamically from config.js/MASK_CONFIG
-        this.mask_ids = new Array()
+        this.mask_ids = new Array();
         for (let i = 0; i <= config.MASK_COUNT; i++) {
-            this.mask_ids.push(i)
+            this.mask_ids.push(i);
         }
-        console.log(`${this.mask_ids}`)
+        console.log(`${this.mask_ids}`);
     }
 
     newNPC() {
@@ -327,11 +327,11 @@ class ServerState {
                     time: result.time,
                     timestamp: Date.now(),
                 };
-                
+
                 // Add to both session and historical leaderboards
                 this.sessionLeaderboard.push(entry);
                 this.leaderboard.push(entry);
-                
+
                 // Sort by time descending (highest time first), then by timestamp ascending
                 this.sessionLeaderboard.sort((a, b) => {
                     if (b.time !== a.time) return b.time - a.time;
@@ -341,17 +341,20 @@ class ServerState {
                     if (b.time !== a.time) return b.time - a.time;
                     return a.timestamp - b.timestamp;
                 });
-                
+
                 // Save to file
                 this.saveLeaderboard();
-                
+
                 // Find player rank in session leaderboard using timestamp for unique identification
-                const playerRank = this.sessionLeaderboard.findIndex(
-                    (e) => e.timestamp === entry.timestamp
-                ) + 1;
-                
-                console.log(`Player ${result.player_id} died with time ${result.time.toFixed(2)}s - Rank: ${playerRank}`);
-                
+                const playerRank =
+                    this.sessionLeaderboard.findIndex(
+                        (e) => e.timestamp === entry.timestamp,
+                    ) + 1;
+
+                console.log(
+                    `Player ${result.player_id} died with time ${result.time.toFixed(2)}s - Rank: ${playerRank}`,
+                );
+
                 // Broadcast updated session leaderboard
                 this.broadcastLeaderboard(result.player_id, playerRank);
             }
