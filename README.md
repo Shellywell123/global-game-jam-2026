@@ -41,10 +41,6 @@ Last man standing PvE multiplayer Web browser game, where the objective is to av
 
 ---
 
-Play the latest build [HERE](https://www.youtube.com/watch?v=Aq5WXmQQooo&list=RDAq5WXmQQooo&start_radio=1)! <!-- TODO update with actual game link -->
-or build it yourself.
-
-
 # Build
 You can build this project with docker or make.
 
