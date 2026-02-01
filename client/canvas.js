@@ -331,7 +331,7 @@ export class GameMap {
     }
 
     draw(dt, viewport, asset_deck) {
-        drawBackground(viewport, asset_deck, this.x_size, this.y_size);
+        drawBackground(viewport, asset_deck, this.y_size, this.x_size);
         this.structures.forEach((s) => {
             viewport.draw(
                 (canvas, x, y) => {
@@ -358,7 +358,7 @@ export class GameMap {
         // right bar
         this.structures.push(
             new Structure(
-                (this.x_size - 1) * this.tile_size,
+                this.x_size * this.tile_size,
                 0,
                 this.tile_size,
                 this.y_size * this.tile_size,
@@ -368,7 +368,7 @@ export class GameMap {
         this.structures.push(
             new Structure(
                 0,
-                (this.y_size - 1) * this.tile_size,
+                this.y_size * this.tile_size,
                 this.x_size * this.tile_size,
                 this.tile_size,
             ),
@@ -401,7 +401,6 @@ export class GameMap {
             });
         });
 
-        console.log(matrix);
         this._setBoundaries();
     }
 
