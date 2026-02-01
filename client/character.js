@@ -90,7 +90,12 @@ async function loadAllMaskSprites(
 class Character {
     // Accepts an array of sprite frames, which it uses to draw itself. These
     // should be `Facing` order (see above).
-    constructor(sprite_frames, mask_frames, tinted_mask_frames) {
+    constructor(
+        sprite_frames,
+        mask_frames,
+        tinted_mask_frames,
+        apply_mask_offset,
+    ) {
         this.x = 0;
         this.y = 0;
         this.vx = 0;
@@ -104,6 +109,7 @@ class Character {
         this.tinted_mask_frames = tinted_mask_frames
             ? tinted_mask_frames
             : mask_frames;
+        this.apply_mask_offset = apply_mask_offset ? true : false;
         // Orientation is the same as Facing
         this.orientation = Facing.DOWN;
         this.active = true;
@@ -150,11 +156,11 @@ class Character {
             this.mask_frames[this.mask][this.orientation],
         );
         const mask_offset_x =
-            this.orientation >= 2
+            this.apply_mask_offset && this.orientation >= 2
                 ? config.MASK_CONFIG[this.mask][1][this.orientation]
                 : 0;
         const mask_offset_y =
-            this.orientation < 2
+            this.apply_mask_offset && this.orientation < 2
                 ? config.MASK_CONFIG[this.mask][1][this.orientation]
                 : 0;
 

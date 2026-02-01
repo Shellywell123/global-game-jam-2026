@@ -120,11 +120,17 @@ class State {
                     player_assets[0],
                     character_masks,
                     player_assets[1],
+                    true,
                 ),
             );
         };
 
-        this.player = new Character(character_sprites, character_masks);
+        this.player = new Character(
+            character_sprites,
+            character_masks,
+            character_masks,
+            true,
+        );
         // This is just a placeholder calculation to center the player in the viewport
         this.player.x = this.viewport.width / 2 - 50;
         this.player.y = this.viewport.height / 2 - 50;
