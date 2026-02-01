@@ -372,7 +372,7 @@ export class ViewPort {
 
         this.height = 600;
         this.width = 800;
-        this.speed_multiplier = 2;
+        this.speed_multiplier = 1;
 
         // How large zone should be where the camera starts to
         // follow the player.
@@ -407,13 +407,13 @@ export class ViewPort {
 
         if (X < this.move_zone) {
             move_x -= 1;
-        } else if (X > this.width - this.move_zone - 96) {
+        } else if (X > this.width - this.move_zone - config.SCALE) {
             move_x += 1;
         }
 
         if (Y < this.move_zone) {
             move_y -= 1;
-        } else if (Y > this.height - this.move_zone - 96) {
+        } else if (Y > this.height - this.move_zone - config.SCALE) {
             move_y += 1;
         }
 

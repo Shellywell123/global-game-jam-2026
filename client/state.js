@@ -160,15 +160,6 @@ class State {
     // Drawing function. This is automatically called by
     // `requestAnimationFrame`.
     draw(dt) {
-        // TODO: have a long hard think about whether this should live in draw
-        // or update?
-        this.viewport.follow(
-            dt,
-            this.player.x,
-            this.player.y,
-            this.player.vx,
-            this.player.vy,
-        );
         this.game_map.draw(dt, this.viewport, this.assets);
 
         this.player.draw(dt, this.viewport, this.assets);
@@ -268,6 +259,14 @@ class State {
         });
 
         this.player.update(dt);
+
+        this.viewport.follow(
+            dt,
+            this.player.x,
+            this.player.y,
+            this.player.vx,
+            this.player.vy,
+        );
 
         // After updating the movement, send updated position to server
         this.conn.send(this.player);
