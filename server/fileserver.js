@@ -272,13 +272,19 @@ class ServerState {
         this.interval_npcs = undefined;
         this.interval_update = undefined;
         this.interval_broadcast = undefined;
+
+        // IDs for masks, updated dynamically from config.js/MASK_CONFIG
+        this.mask_ids = new Array()
+        for (let i = 0; i <= config.MASK_COUNT; i++) {
+            this.mask_ids.push(i)
+        }
+        console.log(`${this.mask_ids}`)
     }
 
     newNPC() {
         var npc = new NonPlayerCharacter();
         npc.speed *= utils.gaussianRandom(1.0, 0.1);
-        // TODO: bump this number when we add more masks
-        npc.state.mask = utils.randomSelect([0, 1, 2]);
+        npc.state.mask = utils.randomSelect(this.mask_ids);
         npc.state.has_mask = true;
 
         npc.state.x =
