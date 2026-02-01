@@ -227,13 +227,6 @@ function drawBackground(viewport, asset_bank, rows, cols) {
 
 // HUD
 function drawForeground(canvas, asset_bank, player, other_players) {
-    // important info
-    // players are never deleted so the length of other_players will never decrease
-    // when a player leaves/ disconnects, they re enter a new player
-    // to tell is a player is active, they have a draw state of 1, deactive is 0
-
-    const activeplayers = other_players.filter((p) => p.active == true);
-
     var leftPadding = 5;
     var topPadding = 25;
 
@@ -246,10 +239,10 @@ function drawForeground(canvas, asset_bank, player, other_players) {
         asset_bank,
     );
 
-    for (let i = 0; i < activeplayers.length; i++) {
+    for (let i = 0; i < other_players.length; i++) {
         renderPlayerStats(
             canvas.ctx,
-            activeplayers[i],
+            other_players[i],
             leftPadding,
             topPadding + (i + 1) * topPadding,
             false,
@@ -396,12 +389,51 @@ export class GameMap {
 }
 
 export class HUD {
-    constructor() {}
+    constructor() {
+        this.minimap_margin = 20;
+    }
+
+    drawMinimap(canvas, game_map, asset_deck, player, other_players) {
+        const height = game_map.y_size * config.MINIMAP_SCALE;
+        const width = game_map.x_size * config.MINIMAP_SCALE;
+        const canvas_x = canvas.width - width - this.minimap_margin;
+        const canvas_y = canvas.height - height - this.minimap_margin;
+
+        canvas.ctx.fillStyle = "green";
+        canvas.ctx.strokeStyle = "black";
+        canvas.ctx.strokeRect(canvas_x, canvas_y, width, height);
+        canvas.ctx.fillRect(canvas_x, canvas_y, width, height);
+
+        const drawPlayerIndicator = (p) => {
+            canvas.ctx.fillStyle = "red";
+            const x = (p.x / config.TILE_SIZE) * config.MINIMAP_SCALE;
+            const y = (p.y / config.TILE_SIZE) * config.MINIMAP_SCALE;
+
+            const currentMask = asset_deck.getSprite(p.mask_frames[p.mask][1]);
+            canvas.ctx.drawImage(
+                currentMask,
+                canvas_x + x,
+                canvas_y + y,
+                config.MINIMAPE_INDICATOR_SCALE,
+                config.MINIMAPE_INDICATOR_SCALE,
+            );
+        };
+
+        drawPlayerIndicator(player);
+        other_players.forEach(drawPlayerIndicator);
+    }
 
     draw(dt, viewport, asset_deck, player, other_players, game_map) {
-        drawForeground(viewport.canvas, asset_deck, player, other_players);
-        // draw the map in the bottom right corner of the canvas
+        // important info
+        // players are never deleted so the length of other_players will never decrease
+        // when a player leaves/ disconnects, they re enter a new player
+        // to tell is a player is active, they have a draw state of 1, deactive is 0
 
+        const active_others = other_players.filter((p) => p.active == true);
+
+        drawForeground(viewport.canvas, asset_deck, player, active_others);
+        // draw the map in the bottom right corner of the canvas
+        this.drawMinimap(canvas, game_map, asset_deck, player, active_others);
     }
 }
 
