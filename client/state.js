@@ -177,6 +177,7 @@ class State {
             this.assets,
             this.player,
             this.other_players,
+            this.game_map,
         );
     }
 
@@ -259,6 +260,11 @@ class State {
         });
 
         this.player.update(dt);
+
+        // Update other players
+        this.other_players.forEach((p) => {
+            p.update(dt);
+        });
 
         this.viewport.follow(
             dt,
