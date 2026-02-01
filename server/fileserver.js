@@ -251,11 +251,12 @@ class PlayerHandler {
 }
 
 class ServerState {
-    constructor(server, websocket_server) {
+    constructor() {
+        this.server = http.createServer(requestHandler);
+        const server = this.server;
+        this.websocket_server = new ws.WebSocketServer({ server });
         this.players = new Array();
         this.npcs = new Array();
-        this.server = server;
-        this.websocket_server = websocket_server;
 
         this.game_running = false;
         this.leaderboard = new Array();
@@ -538,7 +539,6 @@ class ServerState {
     }
 }
 
-const server = http.createServer(requestHandler);
-const state = new ServerState(server, new ws.WebSocketServer({ server }));
+const state = new ServerState();
 state.loadMap(`client${config.WORLD_MAP}`);
 state.bind(PORT);
