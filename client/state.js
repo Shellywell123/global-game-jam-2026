@@ -401,7 +401,6 @@ class State {
                 if (collide !== null) {
                     if (this.player.mask == c.mask) {
                         this.player.health -= config.DAMAGE_RATE * dt;
-                        console.log(this.player.health);
                         if (this.player.health < 0) {
                             this.gameOver();
                         }
