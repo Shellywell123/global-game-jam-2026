@@ -146,7 +146,16 @@ function renderPlayerStatsMask(ctx, player, asset_bank, x, y) {
     ctx.drawImage(maskImage, x, y - 5 - size / 2, size, size);
 }
 
+function renderPlayerStatsHealthBar(ctx, x, y, health) { 
+    // health bar
+    ctx.fillStyle = "red";
+    ctx.fillRect(x + 30, y - 20, 100, 20);
+    ctx.fillStyle = "green";
+    ctx.fillRect(x + 30, y - 20, health, 20);
+}
+
 function renderPlayerStats(ctx, player, x, y, bold, asset_bank) {
+    
     renderPlayerStatsMask(ctx, player, asset_bank, x, y);
 
     var playerName = "";
@@ -160,11 +169,7 @@ function renderPlayerStats(ctx, player, x, y, bold, asset_bank) {
         }
     }
 
-    // health bar
-    ctx.fillStyle = "red";
-    ctx.fillRect(x + 30, y - 20, 100, 20);
-    ctx.fillStyle = "green";
-    ctx.fillRect(x + 30, y - 20, player.health, 20);
+    renderPlayerStatsHealthBar(ctx, x, y, player.health);
 
     renderText(
         canvas.ctx,
