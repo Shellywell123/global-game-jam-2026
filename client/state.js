@@ -198,7 +198,7 @@ class State {
             }
 
             // Update positions of characters on receipt of message
-            for (let i = 0; i < n_players; i++) {
+            for (let i = 0; i < message.players.length; i++) {
                 this.other_players[i].setState(message.players[i]);
             }
         }
