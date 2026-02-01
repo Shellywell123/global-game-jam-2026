@@ -237,6 +237,9 @@ class ServerState {
 
         this.map_width_tiles = 0;
         this.map_height_tiles = 0;
+
+        this.spawn_round = 1;
+        this.spaqn_frequency = 1;
     }
 
     newNPC() {
@@ -343,6 +346,17 @@ class ServerState {
         setInterval(async () => {
             await this.broadcastUpdates();
         }, 1000 / 10); // call 10 times a second
+
+        // Periodically spawn new NPCs
+        setInterval(async () => {
+            const spawn_amount = 
+                gaussianRandom(this.spawn_round, 1*Math.sqrt(this.spawn_round));
+            this.spawn_round *= 2
+            // populate some number of NPCs at the begnning
+            for (let i = 0; i < spawn_amount; i += 1) {
+                this.newNPC();
+            }
+        }, 1 / 3); // once every 3 seconds?
     }
 }
 
