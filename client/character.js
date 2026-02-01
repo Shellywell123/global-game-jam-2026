@@ -87,7 +87,7 @@ async function loadAllMaskSprites(asset_deck, { character = "player" } = {}) {
 class Character {
     // Accepts an array of sprite frames, which it uses to draw itself. These
     // should be `Facing` order (see above).
-    constructor(sprite_frames, mask_frames) {
+    constructor(sprite_frames, mask_frames, tinted_mask_frames) {
         this.x = 0;
         this.y = 0;
         this.vx = 0;
@@ -98,6 +98,7 @@ class Character {
         this.sprite_frames = sprite_frames;
         this.mask = 0;
         this.mask_frames = mask_frames;
+        this.tinted_mask_frames = tinted_mask_frames ? tinted_mask_frames : mask_frames;
         // Orientation is the same as Facing
         this.orientation = Facing.DOWN;
         this.active = true;

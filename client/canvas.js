@@ -145,7 +145,7 @@ function ChessboardPattern(ctx, canvas, asset_bank, rows, cols, x, y) {
 }
 
 function renderPlayerStatsMask(ctx, player, asset_bank, x, y) {
-    const maskImage = asset_bank.getSprite(player.mask_frames[player.mask][1]);
+    const maskImage = asset_bank.getSprite(player.tinted_mask_frames[player.mask][1]);
     var size = 30;
     ctx.drawImage(maskImage, x, y - 5 - size / 2, size, size);
 }
@@ -413,7 +413,7 @@ export class HUD {
             const x = (p.x / config.TILE_SIZE) * config.MINIMAP_SCALE;
             const y = (p.y / config.TILE_SIZE) * config.MINIMAP_SCALE;
 
-            const currentMask = asset_deck.getSprite(p.mask_frames[p.mask][1]);
+            const currentMask = asset_deck.getSprite(p.tinted_mask_frames[p.mask][1]);
             canvas.ctx.drawImage(
                 currentMask,
                 canvas_x + x,
