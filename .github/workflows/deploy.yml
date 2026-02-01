@@ -22,4 +22,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: shellywell123/our-game:latest
+          tags: shellywell123/mask-one-standing:latest
