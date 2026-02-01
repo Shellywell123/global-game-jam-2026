@@ -33,28 +33,6 @@ function lookupPath(url_path) {
     return url_path;
 }
 
-async function requestHandler(req, res) {
-    if (req.url == "/ws") return; // it's already been upgraded
-
-    const file_path = path.join(STATIC_PATH, lookupPath(req.url));
-    const file_exists = await fs.promises.access(file_path).then(...toBool);
-
-    var status_code = 200;
-    if (file_exists) {
-        const ext = path.extname(file_path).substring(1).toLowerCase();
-        const stream = fs.createReadStream(file_path);
-        const mimeType = MIME_TYPES[ext] || MIME_TYPES.default;
-        res.writeHead(status_code, { "Content-Type": mimeType });
-        stream.pipe(res);
-    } else {
-        status_code = 404;
-        res.writeHead(status_code);
-        res.end("Not found\n");
-    }
-
-    // console.log(`${req.method} ${req.url} ${status_code}`);
-}
-
 class CharacterState {
     player_id = "";
     x = 0;
@@ -252,7 +230,9 @@ class PlayerHandler {
 
 class ServerState {
     constructor() {
-        this.server = http.createServer(requestHandler);
+        this.server = http.createServer((req, res) => {
+            this.requestHandler(req, res);
+        });
         const server = this.server;
         this.websocket_server = new ws.WebSocketServer({ server });
         this.players = new Array();
@@ -262,6 +242,7 @@ class ServerState {
         this.leaderboard = new Array();
         this.loadLeaderboard();
 
+        this.map_raw = "";
         this.map_width_tiles = 0;
         this.map_height_tiles = 0;
 
@@ -272,6 +253,32 @@ class ServerState {
         this.interval_npcs = undefined;
         this.interval_update = undefined;
         this.interval_broadcast = undefined;
+    }
+
+    async requestHandler(req, res) {
+        if (req.url == "/ws") return; // it's already been upgraded
+
+        if (req.url == "/map") {
+            res.writeHead(200, { "Content-Type": MIME_TYPES["txt"] });
+            res.end(this.map_raw);
+            return;
+        }
+
+        const file_path = path.join(STATIC_PATH, lookupPath(req.url));
+        const file_exists = await fs.promises.access(file_path).then(...toBool);
+
+        var status_code = 200;
+        if (file_exists) {
+            const ext = path.extname(file_path).substring(1).toLowerCase();
+            const stream = fs.createReadStream(file_path);
+            const mimeType = MIME_TYPES[ext] || MIME_TYPES.default;
+            res.writeHead(status_code, { "Content-Type": mimeType });
+            stream.pipe(res);
+        } else {
+            status_code = 404;
+            res.writeHead(status_code);
+            res.end("Not found\n");
+        }
     }
 
     newNPC() {
@@ -347,6 +354,7 @@ class ServerState {
 
     loadMap(filename) {
         const text = fs.readFileSync(filename, "ascii");
+        this.map_raw = text;
         this.map_matrix = utils.textToMatrix(text);
         this.map_height_tiles = this.map_matrix.length;
         if (this.map_height_tiles > 0) {
