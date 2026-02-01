@@ -65,7 +65,7 @@ async function loadAllMaskSprites(asset_deck, { character = "player" } = {}) {
     var all_promises = new Array();
     config.MASK_CONFIG.forEach((conf) => {
         all_promises = all_promises.concat(fetchMask(conf[0]));
-    }); 
+    });
 
     // await all of them together
     const all_masks = await Promise.all(all_promises);
@@ -139,13 +139,25 @@ class Character {
         const mask_frame = asset_deck.getSprite(
             this.mask_frames[this.mask][this.orientation],
         );
-        const mask_offset_x = this.orientation >= 2 ? config.MASK_CONFIG[this.mask][1][this.orientation] : 0;
-        const mask_offset_y = this.orientation < 2 ? config.MASK_CONFIG[this.mask][1][this.orientation] : 0;
+        const mask_offset_x =
+            this.orientation >= 2
+                ? config.MASK_CONFIG[this.mask][1][this.orientation]
+                : 0;
+        const mask_offset_y =
+            this.orientation < 2
+                ? config.MASK_CONFIG[this.mask][1][this.orientation]
+                : 0;
 
         viewport.draw(
             (canvas, x, y) => {
                 canvas.ctx.drawImage(frame, x, y, this.width, this.height);
-                canvas.ctx.drawImage(mask_frame, x + mask_offset_x, y + mask_offset_y, this.width, this.height);
+                canvas.ctx.drawImage(
+                    mask_frame,
+                    x + mask_offset_x,
+                    y + mask_offset_y,
+                    this.width,
+                    this.height,
+                );
                 if (config.DRAW_COLLISION) {
                     this.collision_box.draw(canvas, x, y);
                 }
@@ -158,7 +170,13 @@ class Character {
     prevMask() {
         console.log("prev mask");
         this.mask == 0 ? (this.mask = config.MASK_COUNT) : (this.mask -= 1);
-        console.log("next mask", "count:", config.MASK_COUNT, "mask:", this.mask);
+        console.log(
+            "next mask",
+            "count:",
+            config.MASK_COUNT,
+            "mask:",
+            this.mask,
+        );
     }
 
     nextMask() {
