@@ -57,22 +57,25 @@ class State {
 
     // Entry point to start the game
     async start() {
-        const all_assets = await Promise.all([
+        const asset_promises = [
             loadPlayerSprites(this.assets),
-            loadPlayerSprites(this.assets, {
-                character: "enemy",
-                tint_key: "arlecchino",
-            }),
             loadAllMaskSprites(this.assets),
             loadAllMaskSprites(this.assets, {
                 character: "enemy",
-                mask_name: "arlecchino",
             }),
-        ]);
+        ];
+        config.MASK_CONFIG.forEach((conf) => {
+            asset_promises.push(
+                loadPlayerSprites(this.assets, {
+                    character: "enemy",
+                    tint_key: conf[0],
+                }),
+            );
+        });
+        const all_assets = await Promise.all(asset_promises);
         const character_sprites = all_assets[0];
-        const enemy_sprites = all_assets[1];
-        const character_masks = all_assets[2];
-        const enemy_masks = all_assets[3];
+        const character_masks = all_assets[1];
+        const enemy_masks = all_assets[2];
 
         const map_index = await this.assets.fetchFile(
             "/assets/maps/asscii-map1.txt",
@@ -80,13 +83,27 @@ class State {
         // set and load the game map
         this.game_map.setMap(this.assets.file_buffer[map_index]);
 
-        this.addCharacter = () => {
-            this.characters.push(new Character(enemy_sprites, enemy_masks));
+        this.addCharacter = (character) => {
+            this.characters.push(
+                new Character(all_assets[3 + character.mask], enemy_masks),
+            );
         };
 
-        this.addPlayer = () => {
+        this.addPlayer = async (character) => {
+            let player_assets = await Promise.all([
+                loadPlayerSprites(this.assets, {
+                    tint_key: character.player_id,
+                }),
+                loadAllMaskSprites(this.assets, {
+                    tint_key: character.player_id,
+                }),
+            ]);
             this.other_players.push(
-                new Character(character_sprites, character_masks),
+                new Character(
+                    player_assets[0],
+                    character_masks,
+                    player_assets[1],
+                ),
             );
         };
 
@@ -116,14 +133,17 @@ class State {
         // Update the characters (enemies)
         if (message.characters !== undefined) {
             var n_char = this.characters.length;
+            let curr_characters_length = this.characters.length;
             let new_characters =
-                message.characters.length - this.characters.length;
+                message.characters.length - curr_characters_length;
 
             if (new_characters < 0) {
                 console.error("Missing characters");
             } else if (new_characters > 0) {
                 for (let i = 0; i < new_characters; i++) {
-                    this.addCharacter();
+                    this.addCharacter(
+                        message.characters[curr_characters_length + i],
+                    );
                 }
             }
 
@@ -139,14 +159,13 @@ class State {
                 (p) => p.player_id != this.player_id,
             );
             var n_players = this.other_players.length;
-            let new_players =
-                message.players.length - this.other_players.length;
+            let new_players = message.players.length - n_players;
 
             if (new_players < 0) {
                 console.error("Missing players");
             } else if (new_players > 0) {
                 for (let i = 0; i < new_players; i++) {
-                    this.addPlayer();
+                    this.addPlayer(message.players[n_players + i]);
                 }
             }
 
