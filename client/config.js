@@ -2,6 +2,9 @@ const SLOW = 0.1;
 const MEDIUM = 0.36;
 const FAST = 0.24;
 
+const CANVAS_HEIGHT = 672;
+const CANVAS_WIDTH = 864;
+
 // Make this bigger to make everything bigger
 // make it smaller to make everything smaller
 const SCALE = 48;
@@ -47,4 +50,6 @@ export {
     MASK_COUNT,
     MINIMAP_SCALE,
     MINIMAPE_INDICATOR_SCALE,
+    CANVAS_WIDTH,
+    CANVAS_HEIGHT,
 };

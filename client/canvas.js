@@ -208,8 +208,8 @@ function renderText(ctx, color, font = "30px Arial", text, x, y, bold) {
 }
 
 export function onResize(canvas) {
-    canvas.width = 800;
-    canvas.height = 600;
+    canvas.width = config.CANVAS_WIDTH;
+    canvas.height = config.CANVAS_HEIGHT;
 }
 
 function drawBackground(viewport, asset_bank, rows, cols) {
@@ -440,8 +440,8 @@ export class ViewPort {
         this.x = 0;
         this.y = 0;
 
-        this.height = 600;
-        this.width = 800;
+        this.height = config.CANVAS_HEIGHT;
+        this.width = config.CANVAS_WIDTH;
         this.speed_multiplier = 1;
 
         // How large zone should be where the camera starts to
