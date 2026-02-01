@@ -20,6 +20,8 @@ const TILE_SIZE = 96;
 
 const DRAW_COLLISION = true;
 
+const SHOW_MESSAGE_TIMER = 3000;
+
 // How fast an individual enemy ticks down the health bar.
 const DAMAGE_RATE = 0.05;
 
@@ -61,4 +63,5 @@ export {
     DAMAGE_RATE,
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
+    SHOW_MESSAGE_TIMER,
 };

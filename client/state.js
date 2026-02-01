@@ -12,8 +12,14 @@ import {
 import { Connection } from "./client.js";
 
 const GameState = Object.freeze({
+    // During the game
     PLAYING: 0,
+    // When the game ends
     GAME_OVER: 1,
+    // Before the game starts
+    LOBBY: 2,
+    // Ready to start
+    READY: 3,
 });
 
 class State {
@@ -31,7 +37,7 @@ class State {
         this.canvas = this._main_canvas;
         this.assets = new AssetDeck();
 
-        this.game_state = GameState.PLAYING;
+        this.game_state = GameState.LOBBY;
 
         // This is just example code for now.
         this.characters = new Array();
@@ -56,6 +62,10 @@ class State {
         this.key_down = false;
         this.key_left = false;
         this.key_right = false;
+
+        // Rudimentary: used to display messages temporarily on the screen
+        this.show_message = 0;
+        this.message = "";
 
         // Functions for creating a new character and new player
         this.addPlayer = undefined;
@@ -125,10 +135,21 @@ class State {
             this.onServerMessage(msg),
         );
 
+        this.player.has_mask = false;
+
         console.log("Game ready");
     }
 
+    // Called when a websocket message comes back from the server
     onServerMessage(message) {
+        // Game started?
+        if (message.start_game !== undefined) {
+            this.show_message = config.SHOW_MESSAGE_TIMER;
+            this.message = "Hdie!";
+            this.game_state = GameState.PLAYING;
+            return;
+        }
+
         // Get the player ID
         if (message.player_id !== undefined) {
             console.log(`Player ID set to ${message.player_id}`);
@@ -183,6 +204,14 @@ class State {
         }
     }
 
+    writeMessage(text, x, y) {
+        this.canvas.ctx.fillStyle = "green";
+        this.canvas.ctx.font = "bold 42px Consolas";
+        this.canvas.ctx.fillText(text, x, y);
+        this.canvas.ctx.strokeStyle = "black";
+        this.canvas.ctx.strokeText(text, x, y);
+    }
+
     // Drawing function. This is automatically called by
     // `requestAnimationFrame`.
     draw(dt) {
@@ -197,6 +226,13 @@ class State {
         this.characters.forEach((c) => {
             c.draw(dt, this.viewport, this.assets);
         });
+
+        if (this.game_state == GameState.LOBBY) {
+            this.writeMessage("Rpess `e` or `q` to waer mask", 100, 200);
+            // Before the game starts, don't draw a HUD.
+            return;
+        }
+
         this.hud.draw(
             dt,
             this.viewport,
@@ -205,6 +241,11 @@ class State {
             this.other_players,
             this.game_map,
         );
+
+        if (this.show_message > 0) {
+            this.show_message -= dt;
+            this.writeMessage(this.message, 100, 200);
+        }
 
         if (this.game_state == GameState.GAME_OVER) {
             this.drawGameOver();
@@ -251,19 +292,30 @@ class State {
                 break;
             case "e":
             case "E":
-                if (active) {
+                if (this.game_state == GameState.LOBBY) {
+                    this.setPlayerReady();
+                } else if (active) {
                     this.player.nextMask();
                 }
                 break;
             case "q":
             case "Q":
-                if (active) {
+                if (this.game_state == GameState.LOBBY) {
+                    this.setPlayerReady();
+                } else if (active) {
                     this.player.prevMask();
                 }
                 break;
             default:
                 console.log(e.key);
         }
+    }
+
+    setPlayerReady() {
+        this.player.has_mask = true;
+        this.game_state = GameState.READY;
+        // notify the server that we are ready
+        this.conn.sendReady();
     }
 
     // Called whenever the window is resized.
@@ -285,25 +337,28 @@ class State {
         // check collisions with geometry
         this.game_map.collide(this.player);
 
-        this.characters.forEach((c) => {
-            c.update(dt);
-            const collide = c.collision_box.collide(
-                c.x,
-                c.y,
-                this.player.collision_box,
-                this.player.x,
-                this.player.y,
-            );
-            if (collide !== null) {
-                if (this.player.mask == c.mask) {
-                    this.player.health -= config.DAMAGE_RATE * dt;
-                    console.log(this.player.health);
-                    if (this.player.health < 0) {
-                        this.gameOver();
+        if (this.game_state == GameState.PLAYING) {
+            // Work out player-npc collisions
+            this.characters.forEach((c) => {
+                c.update(dt);
+                const collide = c.collision_box.collide(
+                    c.x,
+                    c.y,
+                    this.player.collision_box,
+                    this.player.x,
+                    this.player.y,
+                );
+                if (collide !== null) {
+                    if (this.player.mask == c.mask) {
+                        this.player.health -= config.DAMAGE_RATE * dt;
+                        console.log(this.player.health);
+                        if (this.player.health < 0) {
+                            this.gameOver();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         this.player.update(dt);
 
