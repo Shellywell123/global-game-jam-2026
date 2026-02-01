@@ -382,6 +382,8 @@ export class GameMap {
             this.x_size = matrix[0].length;
         }
 
+        console.log(`World map set: ${this.x_size}x${this.y_size}`);
+
         // for each row
         matrix.forEach((row, j) => {
             const y_offset = j * this.tile_size;
@@ -514,7 +516,7 @@ export class ViewPort {
     }
 
     // Center the viewport on a given point moving with a given speed.
-    follow(dt, x, y, vx, vy) {
+    follow(dt, game_map, x, y, vx, vy) {
         let move_x = 0;
         let move_y = 0;
 
@@ -540,6 +542,10 @@ export class ViewPort {
         // Clip to the size of the world
         this.x = Math.max(0, this.x);
         this.y = Math.max(0, this.y);
+        const map_height_pixels = (game_map.y_size + 1) * game_map.tile_size;
+        const map_width_pixels = (game_map.x_size + 1) * game_map.tile_size;
+        this.x = Math.min(map_width_pixels - this.width, this.x);
+        this.y = Math.min(map_height_pixels - this.height, this.y);
     }
 }
 

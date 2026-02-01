@@ -378,6 +378,7 @@ class State {
 
         this.viewport.follow(
             dt,
+            this.game_map,
             this.player.x,
             this.player.y,
             this.player.vx,
