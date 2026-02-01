@@ -414,7 +414,7 @@ class State {
         drawText("red", 0);
 
         const currentMask = this.assets.getSprite(
-            this.player.mask_frames[this.mask][1],
+            this.player.mask_frames[this.player.mask][1],
         );
         this.canvas.ctx.drawImage(
             currentMask,
