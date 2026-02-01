@@ -29,7 +29,7 @@ const URI = `ws://${hostname}:8000/`;
 const MASK_CONFIG = [
     ["arlecchino", [0, 0, 0, 0]],
     ["il-dottore", [0, 0, 0, 0]],
-    ["scaramouche", [0, 0, -10, 10]],
+    ["scaramouche", [0, 0, -14, 14]],
 ];
 
 const MASK_COUNT = MASK_CONFIG.length - 1;
