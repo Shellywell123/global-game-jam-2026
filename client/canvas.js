@@ -627,7 +627,7 @@ function addGithubLink(canvas) {
     if (!document.getElementById("github-logo-link")) {
         const link = document.createElement("a");
         link.id = "github-logo-link";
-        link.href = "https://github.com/RiFactor/global-game-jam-26";
+        link.href = "https://github.com/Shellywell123/global-game-jam-2026";
         link.textContent = "View on GITHUB";
         link.target = "_blank";
         link.style.margin = "10px 10px 10px 10px";
