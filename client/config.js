@@ -11,7 +11,7 @@ const VIEWPORT_BUFFER = 3 * SCALE;
 
 const TILE_SIZE = 96;
 
-const DRAW_COLLISION = true;
+const DRAW_COLLISION = false;
 
 const URI = "ws://127.0.0.1:8000/";
 

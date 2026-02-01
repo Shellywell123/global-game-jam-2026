@@ -5,3 +5,7 @@ export function magnitude(x, y) {
 export function textToMatrix(text) {
     return text.split("\n").map((row) => row.split(""));
 }
+
+export function randomSelect(array) {
+     return array[Math.floor(Math.random() * array.length)];
+}

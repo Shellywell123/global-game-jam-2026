@@ -245,8 +245,9 @@ class ServerState {
         npc.state.vy = (Math.random() - 0.5) * 0.1;
         npc.speed *= gaussianRandom(1.0, 0.1);
         npc.state.draw_state = 1;
+        // TODO: bump this number when we add more masks
+        npc.state.mask = utils.randomSelect([0, 1, 2]);
 
-        // HACK: adding some slight randomness to npc start position to avoid div by 0 issues later
         npc.state.x =
             Math.random() * (this.map_width_tiles - 1) * config.TILE_SIZE +
             config.TILE_SIZE;
