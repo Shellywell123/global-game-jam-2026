@@ -57,21 +57,21 @@ class State {
 
     // Entry point to start the game
     async start() {
-	const asset_promises = [
+        const asset_promises = [
             loadPlayerSprites(this.assets),
             loadAllMaskSprites(this.assets),
             loadAllMaskSprites(this.assets, {
                 character: "enemy",
-            })
+            }),
         ];
         config.MASK_CONFIG.forEach((conf) => {
             asset_promises.push(
                 loadPlayerSprites(this.assets, {
                     character: "enemy",
                     tint_key: conf[0],
-                })
+                }),
             );
-	});
+        });
         const all_assets = await Promise.all(asset_promises);
         const character_sprites = all_assets[0];
         const character_masks = all_assets[1];
@@ -84,20 +84,26 @@ class State {
         this.game_map.setMap(this.assets.file_buffer[map_index]);
 
         this.addCharacter = (character) => {
-            this.characters.push(new Character(all_assets[3 + character.mask], enemy_masks));
+            this.characters.push(
+                new Character(all_assets[3 + character.mask], enemy_masks),
+            );
         };
 
         this.addPlayer = async (character) => {
             let player_assets = await Promise.all([
                 loadPlayerSprites(this.assets, {
-		    tint_key: character.player_id
-	        }),
+                    tint_key: character.player_id,
+                }),
                 loadAllMaskSprites(this.assets, {
-		    tint_key: character.player_id
-	        }),
-	    ]);
+                    tint_key: character.player_id,
+                }),
+            ]);
             this.other_players.push(
-                new Character(player_assets[0], character_masks, player_assets[1]),
+                new Character(
+                    player_assets[0],
+                    character_masks,
+                    player_assets[1],
+                ),
             );
         };
 
@@ -127,7 +133,7 @@ class State {
         // Update the characters (enemies)
         if (message.characters !== undefined) {
             var n_char = this.characters.length;
-	    let curr_characters_length = this.characters.length;
+            let curr_characters_length = this.characters.length;
             let new_characters =
                 message.characters.length - curr_characters_length;
 
@@ -135,7 +141,9 @@ class State {
                 console.error("Missing characters");
             } else if (new_characters > 0) {
                 for (let i = 0; i < new_characters; i++) {
-                    this.addCharacter(message.characters[curr_characters_length + i]);
+                    this.addCharacter(
+                        message.characters[curr_characters_length + i],
+                    );
                 }
             }
 
@@ -151,8 +159,7 @@ class State {
                 (p) => p.player_id != this.player_id,
             );
             var n_players = this.other_players.length;
-            let new_players =
-                message.players.length - n_players;
+            let new_players = message.players.length - n_players;
 
             if (new_players < 0) {
                 console.error("Missing players");
