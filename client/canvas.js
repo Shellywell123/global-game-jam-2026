@@ -226,50 +226,44 @@ function drawBackground(viewport, asset_bank, rows, cols) {
 }
 
 // HUD
-function drawForeground(viewport, asset_bank, player, other_players) {
-    viewport.draw(
-        (canvas) => {
-            // important info
-            // players are never deleted so the length of other_players will never decrease
-            // when a player leaves/ disconnects, they re enter a new player
-            // to tell is a player is active, they have a draw state of 1, deactive is 0
+function drawForeground(canvas, asset_bank, player, other_players) {
+    // important info
+    // players are never deleted so the length of other_players will never decrease
+    // when a player leaves/ disconnects, they re enter a new player
+    // to tell is a player is active, they have a draw state of 1, deactive is 0
 
-            const activeplayers = other_players.filter((p) => p.active == true);
+    const activeplayers = other_players.filter((p) => p.active == true);
 
-            var leftPadding = 5;
-            var topPadding = 25;
+    var leftPadding = 5;
+    var topPadding = 25;
 
-            renderPlayerStats(
-                canvas.ctx,
-                player,
-                leftPadding,
-                topPadding,
-                true,
-                asset_bank,
-            );
+    renderPlayerStats(
+        canvas.ctx,
+        player,
+        leftPadding,
+        topPadding,
+        true,
+        asset_bank,
+    );
 
-            for (let i = 0; i < activeplayers.length; i++) {
-                renderPlayerStats(
-                    canvas.ctx,
-                    activeplayers[i],
-                    leftPadding,
-                    topPadding + (i + 1) * topPadding,
-                    false,
-                    asset_bank,
-                );
-            }
+    for (let i = 0; i < activeplayers.length; i++) {
+        renderPlayerStats(
+            canvas.ctx,
+            activeplayers[i],
+            leftPadding,
+            topPadding + (i + 1) * topPadding,
+            false,
+            asset_bank,
+        );
+    }
 
-            renderStatusBar(
-                canvas.ctx,
-                player,
-                canvas.width / 2,
-                canvas.height - 50,
-                true,
-                asset_bank,
-            );
-        },
-        0,
-        0,
+    renderStatusBar(
+        canvas.ctx,
+        player,
+        canvas.width / 2,
+        canvas.height - 50,
+        true,
+        asset_bank,
     );
 }
 
@@ -404,8 +398,10 @@ export class GameMap {
 export class HUD {
     constructor() {}
 
-    draw(dt, viewport, asset_deck, player, other_players) {
-        drawForeground(viewport, asset_deck, player, other_players);
+    draw(dt, viewport, asset_deck, player, other_players, game_map) {
+        drawForeground(viewport.canvas, asset_deck, player, other_players);
+        // draw the map in the bottom right corner of the canvas
+
     }
 }
 
