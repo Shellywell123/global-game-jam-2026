@@ -146,7 +146,7 @@ function renderPlayerStatsMask(ctx, player, asset_bank, x, y) {
     ctx.drawImage(maskImage, x, y - 5 - size / 2, size, size);
 }
 
-function renderPlayerStatsHealthBar(ctx, x, y, health) { 
+function renderPlayerStatsHealthBar(ctx, x, y, health) {
     // health bar
     ctx.fillStyle = "red";
     ctx.fillRect(x + 30, y - 20, 100, 20);
@@ -155,7 +155,6 @@ function renderPlayerStatsHealthBar(ctx, x, y, health) {
 }
 
 function renderPlayerStats(ctx, player, x, y, bold, asset_bank) {
-    
     renderPlayerStatsMask(ctx, player, asset_bank, x, y);
 
     var playerName = "";
