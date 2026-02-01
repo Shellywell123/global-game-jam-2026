@@ -65,6 +65,6 @@ then navigate to [localhost:8000](https://localhost:8000) in your browser.
 
 
 # credits
-
+- [ggj](https://globalgamejam.org/games/2026/mask-one-standing-2)
 - [devs](https://github.com/RiFactor/global-game-jam-26/graphs/contributors)
 - [music - ReflexTunes : Game Zone](https://pixabay.com/music/video-games-game-zone-320262/)
